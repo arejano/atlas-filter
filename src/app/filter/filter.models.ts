@@ -1,10 +1,13 @@
 
 export interface FilterConfig {
+  defaultValue: string;
   sync: boolean;
   filters: Array<FilterItemConfig>;
 }
 
 export interface FilterItemConfig {
+  autostart?: boolean;
+  data?: any;
   required?: boolean;
   disabledLabel: string;
   placeholder: string;
@@ -16,17 +19,16 @@ export interface FilterItemConfig {
   filter_watch: Array<FilterType>;
 }
 
+//Achar uma forma de ordenar sem utilizar o enum
 export enum FilterType {
-  Agrupamento,
   AnoLetivo,
-  Avaliacao,
-  Chamada,
-  Disciplina,
-  Escola,
   Rede,
-  Serie,
-  TipoAvaliacao,
+  Escola,
+  Agrupamento,
   Turma,
+  TipoAvaliacao,
+  Disciplina,
+  Chamada,
 }
 
 export interface FilterData {

@@ -1,4 +1,29 @@
-<p>filter works!</p>
+<div class="filter-container">
+	<span>Contador: {{ counter() }}</span>
+	<div class="blocks-container">
+		<ng-container *ngFor="let filter of filters | keyvalue">
+			<div class="filter-block">
+				<div class="filter-label">
+					<span>{{filter.value.config.label}}<span *ngIf="filter.value.config.required"> * </span></span>
+					<span>{{filter.value.status()}}</span>
+				</div>
+				<select [value]="filter.value.config.key" [(ngModel)]="filter.value.selected"
+					(change)="update(filter.value.selected, filter.value)">
+					<option [value]="defaultValue">{{filter.value.config.placeholder}}</option>>
+					<option *ngFor="let option of filter.value.config.data" [value]="option.hash">
+						{{option.descricao}}</option>
+				</select>
+			</div>
+		</ng-container>
+	</div>
+	<div class="filter-buttons">
+		<button (click)="reset()">Limpar</button>
+		<button (click)="aplicar()">Aplicar</button>
+	</div>
 
-<ng-container *ngFor="let filter of filters | keyvalue">
-</ng-container>
+	<div class="filtro-json">
+		<code>
+			{{ filter | json}}
+		</code>
+	</div>
+</div>

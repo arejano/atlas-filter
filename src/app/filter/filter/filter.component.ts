@@ -13,64 +13,105 @@ export class FilterComponent implements OnInit {
 
   filters: Map<FilterType, FilterItem> = new Map();
   filter: any = {};
+  defaultValue: string = "";
 
   ngOnInit(): void {
     this.config.filters.forEach((filter_config) => {
       this.filters.set(filter_config.type, new FilterItem(filter_config))
     })
-    this.update(`000`, this.filters.get(FilterType.AnoLetivo));
+    this.defaultValue = this.config.defaultValue;
+    this.autoStart();
+    this.updateFilter();
   }
 
-  update(hash: string, filter: FilterItem) {
+  update(hash: string | Array<string>, filter: FilterItem) {
+    filter.selected = hash;
+    this.updateFilter();
     this.notify(filter)
   }
 
   notify(filter: FilterItem) {
-    console.log(filter)
-    filter.config.filter_watch.forEach((e) => {
-      let filter = this.filters.get(e);
-      if (filter !== undefined) {
-        filter.update();
+    this.filters.forEach((f) => {
+      if (f.config.filter_watch.includes(filter.config.type)) {
+        f.update();
+      }
+    })
+
+    this.filters.forEach((filter) => {
+      this.filter[filter.config.key] = filter.selected;
+    })
+  }
+
+  reset() {
+    this.filters.forEach((f) => {
+      f.reset();
+    })
+    this.autoStart();
+    this.updateFilter();
+  }
+
+  autoStart() {
+    this.filters.forEach((f) => {
+      if (f.config.autostart) {
+        f.init();
       }
     })
   }
 
+  updateFilter() {
+    this.filters.forEach((filter) => {
+      this.filter[filter.config.key] = filter.selected;
+    })
+  }
+
+  aplicar() { }
+
+  counter() {
+    return Object.values(this.filter).filter((f) => {
+      return f !== this.defaultValue
+    }).length
+  }
 }
 
 class FilterItem {
   config: FilterItemConfig;
   selected: string | Array<string> = "";
-
-  data = [
-    { hash: '000', descricao: 'XXX', },
-    { hash: '000', descricao: 'XXX', },
-    { hash: '000', descricao: 'XXX', },
-    { hash: '000', descricao: 'XXX', },
-    { hash: '000', descricao: 'XXX', },
-    { hash: '000', descricao: 'XXX', },
-    { hash: '000', descricao: 'XXX', },
-    { hash: '000', descricao: 'XXX', },
-    { hash: '000', descricao: 'XXX', },
-    { hash: '000', descricao: 'XXX', },
-    { hash: '000', descricao: 'XXX', },
-  ]
+  data: any
 
   constructor(config: FilterItemConfig) {
     this.config = config;
-    if (config.type === FilterType.AnoLetivo) {
-      this.data = [{ hash: '2023', descricao: '2023', }];
-    }
-    this.getData(this.data);
+    this.data = config.data;
+    this.init();
   }
 
-  getData(data: any) {
-    this.data = data;
+
+  init() {
     if (this.data.length === 1) {
+      // console.log(this.config.label, this.config.data.length)
       this.selected = this.data[0].hash;
     }
   }
 
   update() {
-    console.log(`Update via notify`)
+    this.init();
+    console.log(`Atualizando o filtro: ${this.config.label}`)
+  }
+
+  reset() {
+    this.selected = "";
+  }
+
+  status() {
+    if (this.config.required && this.selected) {
+      return "S"
+    }
+    if (this.config.required) {
+      return "R"
+    }
+    if (this.selected) {
+      return "S"
+    }
+
+    return ""
   }
 }
