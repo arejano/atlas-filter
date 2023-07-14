@@ -1,4 +1,5 @@
 import { FilterConfig, FilterType } from "./filter.models";
+import { FiltroHistoricoLancamentos } from "./filter.service";
 import mock from "./mock";
 
 const filter_config: FilterConfig = {
@@ -7,6 +8,7 @@ const filter_config: FilterConfig = {
   filters: [
     {
       autostart: true,
+      labelService: "anoLetivo",
       required: true,
       label: "Ano Letivo",
       key: "hashAnoLetivo",
@@ -21,6 +23,7 @@ const filter_config: FilterConfig = {
     {
       required: false,
       label: "Rede",
+      labelService: "rede",
       key: "hashRede",
       disabledLabel: "Selecione primeiro ano letivo",
       placeholder: "Selecione o ano letivo",
@@ -33,6 +36,7 @@ const filter_config: FilterConfig = {
     {
       required: false,
       label: "Escola",
+      labelService: "escola",
       key: "hashEscola",
       disabledLabel: "Selecione primeiro a rede",
       placeholder: "Selecione",
@@ -45,6 +49,7 @@ const filter_config: FilterConfig = {
     {
       required: false,
       label: "Agrupamento",
+      labelService: "agrupamento",
       key: "hashAgrupamento",
       disabledLabel: "Erro",
       placeholder: "Selecione",
@@ -57,6 +62,7 @@ const filter_config: FilterConfig = {
     {
       required: false,
       label: "Turma",
+      labelService: "turma",
       key: "hashTurma",
       disabledLabel: "Selecione primeiro a rede",
       placeholder: "Selecione",
@@ -69,6 +75,7 @@ const filter_config: FilterConfig = {
     {
       required: false,
       label: "Tipo de Avaliacao",
+      labelService: "tipoAvaliacoes",
       key: "hashTipoAvaliacao",
       disabledLabel: "Selecione primeiro a rede",
       placeholder: "Selecione",
@@ -81,6 +88,7 @@ const filter_config: FilterConfig = {
     {
       required: false,
       label: "Disciplina",
+      labelService: "disciplina",
       key: "hashDisciplina",
       disabledLabel: "Selecione primeiro a rede",
       placeholder: "Selecione",
@@ -93,6 +101,7 @@ const filter_config: FilterConfig = {
     {
       required: false,
       label: "Chamada",
+      labelService: "chamada",
       key: "hashChamada",
       disabledLabel: "",
       placeholder: "Selecione",

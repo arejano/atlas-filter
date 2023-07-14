@@ -1,29 +1,34 @@
 <div class="filter-container">
-	<span>Contador: {{ counter() }}</span>
+	<span>Contador: {{ mediator.counter() }}</span>
 	<div class="blocks-container">
-		<ng-container *ngFor="let filter of filters | keyvalue">
+		<ng-container *ngFor="let filter of mediator.getFilters()">
 			<div class="filter-block">
 				<div class="filter-label">
-					<span>{{filter.value.config.label}}<span *ngIf="filter.value.config.required"> * </span></span>
-					<span>{{filter.value.status()}}</span>
+					<span>{{filter.config.label}}<span *ngIf="filter.config.required"> * </span></span>
+					<!-- <span>{{filter.status()}}</span> -->
 				</div>
-				<select [value]="filter.value.config.key" [(ngModel)]="filter.value.selected"
-					(change)="update(filter.value.selected, filter.value)">
-					<option [value]="defaultValue">{{filter.value.config.placeholder}}</option>>
-					<option *ngFor="let option of filter.value.config.data" [value]="option.hash">
+				<select [value]="filter.config.key" [(ngModel)]="filter.selected"
+					(change)="mediator.notify(filter)">
+					<option [value]="mediator.defaultValue">{{filter.config.placeholder}}</option>>
+					<option *ngFor="let option of filter.data" [value]="option.hash">
 						{{option.descricao}}</option>
 				</select>
+				<div class="filter-status">
+					<span>{{filter.isValid()}}</span>
+					<span>{{filter.enabled ? 'true' : 'false'}}</span>
+				</div>
 			</div>
 		</ng-container>
 	</div>
 	<div class="filter-buttons">
-		<button (click)="reset()">Limpar</button>
-		<button (click)="aplicar()">Aplicar</button>
+		<button (click)="mediator.reset()">Limpar</button>
+		<button [disabled]="!mediator.isValid()" (click)="aplicar()">Aplicar</button>
 	</div>
 
+	<span>Filtro eh valido: {{mediator.isValid() | json }} </span>
 	<div class="filtro-json">
 		<code>
-			{{ filter | json}}
+			{{ mediator.getFilterRequest() | json}}
 		</code>
 	</div>
 </div>
